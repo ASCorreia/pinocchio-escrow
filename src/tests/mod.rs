@@ -8,7 +8,7 @@ mod tests {
         native_token::LAMPORTS_PER_SOL,
         program_option::COption,
         program_pack::Pack,
-        pubkey::{self, Pubkey},
+        pubkey::{self, Pubkey}, rent::Rent, sysvar::Sysvar,
     };
     use spl_token::state::AccountState;
 
@@ -189,5 +189,28 @@ mod tests {
             spl_token::ID,
             program::create_program_account_loader_v3(&spl_token::ID),
         );
+
+        let maker = Pubkey::new_from_array([0x02; 32]);
+        let maker_account = AccountSharedData::new(1 * LAMPORTS_PER_SOL, 0, &system_program);
+
+        let mint_x = Pubkey::new_from_array([0x03; 32]);
+        let mut mint_x_account = AccountSharedData::new(
+            mollusk
+                .sysvars
+                .rent
+                .minimum_balance(spl_token::state::Mint::LEN), 
+            spl_token::state::Mint::LEN, 
+            &token_program
+        );
+        solana_sdk::program_pack::Pack::pack(
+            spl_token::state::Mint {
+                mint_authority: COption::None,
+                supply: 100_000_000,
+                decimals: 6,
+                is_initialized: true,
+                freeze_authority: COption::None,
+            },
+            mint_x_account.data_as_mut_slice(),
+        ).unwrap();
     }
 }
