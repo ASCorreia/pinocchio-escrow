@@ -41,7 +41,7 @@ mod tests {
             solana_sdk::pubkey::Pubkey::find_program_address(&[(b"escrow"), maker.as_ref()], &ID);
         let escrow_account = AccountSharedData::new(0, 0, &system_program);
 
-        let mint_x = Pubkey::new_unique();
+        let mint_x = Pubkey::new_from_array([0x03; 32]);
         let mut mint_x_account = AccountSharedData::new(
             mollusk
                 .sysvars
@@ -62,7 +62,7 @@ mod tests {
         )
         .unwrap();
 
-        let mint_y = Pubkey::new_unique();
+        let mint_y = Pubkey::new_from_array([0x04; 32]);
         let mut mint_y_account = AccountSharedData::new(
             mollusk
                 .sysvars
@@ -83,7 +83,7 @@ mod tests {
         )
         .unwrap();
 
-        let maker_ata = Pubkey::new_unique();
+        let maker_ata = Pubkey::new_from_array([0x05; 32]);
         let mut maker_ata_account = AccountSharedData::new(
             mollusk
                 .sysvars
@@ -107,7 +107,7 @@ mod tests {
         )
         .unwrap();
 
-        let vault = Pubkey::new_unique();
+        let vault = Pubkey::new_from_array([0x06; 32]);
         let mut vault_account = AccountSharedData::new(
             mollusk
                 .sysvars
@@ -169,6 +169,25 @@ mod tests {
             &[
                 Check::success(),
             ],
+        );
+    }
+
+    #[test]
+    fn test_take() {
+        let mut mollusk = Mollusk::new(&ID, "target/deploy/pinocchio_escrow");
+
+        let (system_program, system_account) =
+            mollusk_svm::program::keyed_account_for_system_program();
+
+        mollusk.add_program(
+            &spl_token::ID,
+            "src/tests/spl_token-3.5.0",
+            &mollusk_svm::program::loader_keys::LOADER_V3,
+        );
+
+        let (token_program, token_account) = (
+            spl_token::ID,
+            program::create_program_account_loader_v3(&spl_token::ID),
         );
     }
 }
