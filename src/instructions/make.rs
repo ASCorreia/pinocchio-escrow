@@ -5,7 +5,7 @@ use pinocchio_token::state::TokenAccount;
 use crate::state::Escrow;
 
 pub fn process_make_instruction(accounts: &[AccountInfo], data: &[u8]) -> ProgramResult {
-    let [maker, mint_x, mint_y, maker_ata, vault, escrow, _system_program, _token_program] = accounts else {
+    let [maker, mint_x, mint_y, maker_ata, vault, escrow, _system_program, _token_program, _remaining @ ..] = accounts else {
         return Err(ProgramError::NotEnoughAccountKeys)
     };
 
