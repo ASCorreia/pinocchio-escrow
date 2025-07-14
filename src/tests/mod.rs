@@ -8,12 +8,12 @@ mod tests {
         native_token::LAMPORTS_PER_SOL,
         program_option::COption,
         program_pack::Pack,
-        pubkey::{self, Pubkey}, rent::Rent, sysvar::Sysvar,
+        pubkey::{self, Pubkey},
     };
     use spl_token::state::AccountState;
 
     const ID: Pubkey = pubkey::Pubkey::new_from_array(five8_const::decode_32_const(
-        "22222222222222222222222222222222222222222222",
+        "4ibrEMW5F6hKnkW4jVedswYv6H6VtwPN6ar6dvXDN1nT",
     ));
 
     #[test]

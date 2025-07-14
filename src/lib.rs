@@ -10,7 +10,7 @@ mod tests;
 
 entrypoint!(process_instruction);
 
-const ID: Pubkey = five8_const::decode_32_const("22222222222222222222222222222222222222222222");
+pinocchio_pubkey::declare_id!("4ibrEMW5F6hKnkW4jVedswYv6H6VtwPN6ar6dvXDN1nT");
 
 pub fn process_instruction(
     program_id: &Pubkey,

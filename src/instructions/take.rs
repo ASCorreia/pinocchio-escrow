@@ -10,7 +10,7 @@ pub fn process_take_instruction(accounts: &[AccountInfo], _data: &[u8]) -> Progr
         return  Err(pinocchio::program_error::ProgramError::NotEnoughAccountKeys);
     };
     
-    let escrow_account = Escrow::from_account_info_unchecked(escrow);
+    let escrow_account = Escrow::from_account_info(escrow);
     assert_eq!(escrow_account.mint_x, *mint_x.key());
     assert_eq!(escrow_account.mint_y, *mint_y.key());
 

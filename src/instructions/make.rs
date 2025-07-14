@@ -5,7 +5,7 @@ use pinocchio_token::state::TokenAccount;
 use crate::state::Escrow;
 
 pub fn process_make_instruction(accounts: &[AccountInfo], data: &[u8]) -> ProgramResult {
-    let [maker, mint_x, mint_y, maker_ata, vault, escrow, _system_program, _token_program] = accounts else {
+    let [maker, mint_x, mint_y, maker_ata, vault, escrow, _system_program, _remaining @ ..] = accounts else {
         return Err(ProgramError::NotEnoughAccountKeys)
     };
 
@@ -16,11 +16,13 @@ pub fn process_make_instruction(accounts: &[AccountInfo], data: &[u8]) -> Progra
     let pda = pubkey::checked_create_program_address(seeds, &crate::ID).unwrap();
     assert_eq!(&pda, escrow.key());
 
-    assert_eq!(mint_x.owner(), &pinocchio_token::ID); // Not needed since CPI since deposit will fail if not owned by token program
-    assert_eq!(mint_y.owner(), &pinocchio_token::ID); // Check if mint_x and mint_y are owned by token program so we don't accept any random account
+    assert
+
+    assert_eq!(unsafe {mint_x.owner()}, &pinocchio_token::ID); // Not needed since CPI since deposit will fail if not owned by token program
+    assert_eq!(unsafe {mint_y.owner()}, &pinocchio_token::ID); // Check if mint_x and mint_y are owned by token program so we don't accept any random account
     assert!( unsafe { TokenAccount::from_account_info_unchecked(vault).unwrap().owner() == escrow.key() } ); // Check if vault is owned (authority) by escrow account
 
-    if escrow.owner() != &crate::ID {
+    if unsafe {escrow.owner()} != &crate::ID {
         log!("Creating Escrow Account");
 
         // Create Escrow Account
@@ -33,7 +35,7 @@ pub fn process_make_instruction(accounts: &[AccountInfo], data: &[u8]) -> Progra
         }.invoke()?;
 
         // Populate Escrow Account
-        let escrow_account = Escrow::from_account_info_unchecked(&escrow);
+        let escrow_account = Escrow::from_account_info(&escrow);
         escrow_account.maker = *maker.key();
         escrow_account.mint_x = *mint_x.key();
         escrow_account.mint_y = *mint_y.key();
