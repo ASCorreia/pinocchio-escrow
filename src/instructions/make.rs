@@ -16,8 +16,6 @@ pub fn process_make_instruction(accounts: &[AccountInfo], data: &[u8]) -> Progra
     let pda = pubkey::checked_create_program_address(seeds, &crate::ID).unwrap();
     assert_eq!(&pda, escrow.key());
 
-    assert
-
     assert_eq!(unsafe {mint_x.owner()}, &pinocchio_token::ID); // Not needed since CPI since deposit will fail if not owned by token program
     assert_eq!(unsafe {mint_y.owner()}, &pinocchio_token::ID); // Check if mint_x and mint_y are owned by token program so we don't accept any random account
     assert!( unsafe { TokenAccount::from_account_info_unchecked(vault).unwrap().owner() == escrow.key() } ); // Check if vault is owned (authority) by escrow account

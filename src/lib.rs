@@ -1,3 +1,5 @@
+#![allow(unexpected_cfgs)]
+
 use instructions::EscrowInstructions;
 use pinocchio::{
     account_info::AccountInfo, entrypoint, program_error::ProgramError, pubkey::Pubkey,
